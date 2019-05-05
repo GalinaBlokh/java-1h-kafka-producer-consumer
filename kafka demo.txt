@@ -1,0 +1,54 @@
+Zookeeper start
+folders:
+- conf
+- bin
+
+1. conf/zoo_sample.cfg
+- copy/paste with name zoo.cfg
+- REMOVE ALL LINES STARTINGS WITH #
+- dataDir -> replace with my own folder
+zookeeper will dump all info from kafka to this folder
+
+2. Start zookeeper server
+- Set JAVA_HOME env variable (Win: https://javatutorial.net/set-java-home-windows-10 | MacOS: https://www.youtube.com/watch?v=H4wgubSwfDc)
+- open terminal in zookeeper folder
+
+Windows:
+print "bin\zkServer.cmd" 
+
+MacOS:
+- bin/zkServer.sh start (server start)
+- bin/zkServer.sh stop (server stop)
+
+Note: zkServer will search for conf/zoo.cfg in conf folder. 
+If your config elsewhere - specify as a param (zkServer my\path\to\config)
+
+
+
+Full tutorial can be found here
+https://kafka.apache.org/quickstart
+
+--------------------------------------------------------------------------
+Kakfa start:
+1. zookeeper server start (localhost:2181)
+zookeeper_folder> zkServer.cmd
+
+2. kafka server			  (localhost:9092 - bootstrap-server)
+kafka_folder> bin\windows\kafka-server-start.bat config\server.properties
+
+3. create topic
+kafka_folder\bin\windows> kafka-topics.bat --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic myTopic
+
+4. create producer
+kafka_folder\bin\windows> kafka-console-producer.bat --broker-list localhost:9092 --topic myTopic
+
+5. create consumer
+kafka_folder\bin\windows> kafka-console-consumer.bat --boostrap-server localhost:9092 --topic myTopic --from-beginning
+kafka_folder\bin\windows> kafka-console-consumer.bat --boostrap-server localhost:9092 --topic myTopic --partition 0 --offset earliest
+kafka_folder\bin\windows> kafka-console-consumer.bat --boostrap-server localhost:9092 --topic myTopic --partition 0 --offset latest
+
+Kafka clean up
+0. Stop zookeeper server and kafka server
+1. Remove everything from zookeeper's dataDir (see dataDir in zoo.cfg)
+2. Remove folder "logs" from kafka root folder
+
